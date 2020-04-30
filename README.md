@@ -1,10 +1,10 @@
 # php-eval-hook
 
-A PHP extension for hooking `eval`. Useful for dumping eval-obfuscated code.
+A PHP extension for hooking `eval()`. Useful for dumping eval-obfuscated code. The extension is expected to work with PHP 7.x in general. May work with PHP 5.x but is untested.
 
 ## Compiling steps
 
-The extension has only been tested on PHP 7.2.24 available on Ubuntu 18.04 repos. Expected to work with PHP 7.x in general. May work with PHP 5.x but is untested.
+A precompiled extension can be downloaded from [releases](https://github.com/extremecoders-re/php-eval-hook/releases). It has been compiled against PHP 7.2.24 available on Ubuntu 18.04 repos. The precompiled extension is not guaranteed to work on your system. Hence it's always recommended to compile from source as shown below.
 
 1. Install php and php-dev packages. Here we are using the packages available on the official Ubuntu 18.04 repos.
 
