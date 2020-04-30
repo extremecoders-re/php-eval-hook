@@ -15,7 +15,7 @@ The extension has only been tested on PHP 7.2.24 available on Ubuntu 18.04 repos
 2. Clone the repository
 
     ```
-    git clone https://github.com/extremecoders-re/php-eval-hook
+    $ git clone https://github.com/extremecoders-re/php-eval-hook
     ```
 
 3. Run `phpize`. This will generate the `Makefile` and other files needed for buidling the extension.
@@ -131,3 +131,7 @@ This is an obfuscated function
 ## Credits
 
 The extension is based on [php-eval](https://github.com/mfmans/php-eval).
+
+## License
+
+MIT
