@@ -7,35 +7,34 @@
 #define EVAL_CALLBACK_FUNCTION  "__eval"
 
 
-static zend_op_array* (*old_compile_string)(zval *source_string, char *filename TSRMLS_DC);
+static zend_op_array* (*old_compile_string)(zend_string *source_string, const char *filename);
 
 
-static zend_op_array* evalhook_compile_string(zval *source_string, char *filename TSRMLS_DC)
+static zend_op_array* evalhook_compile_string(zend_string *source_string, const char *filename)
 {
 	zend_op_array *op_array = NULL;
 	int op_compiled = 0;
 
 	if(strstr(filename, "eval()'d code")) {
-		if(zend_hash_str_exists(CG(function_table), EVAL_CALLBACK_FUNCTION, strlen(EVAL_CALLBACK_FUNCTION) TSRMLS_CC)) {
+		if(zend_hash_str_exists(CG(function_table), EVAL_CALLBACK_FUNCTION, strlen(EVAL_CALLBACK_FUNCTION))) {
 			zval function;
 			zval retval;
 			zval parameter[2];
 
-			parameter[0] = *source_string;
-
+			ZVAL_STR(&parameter[0], source_string);
 			ZVAL_STRING(&function, EVAL_CALLBACK_FUNCTION);
 			ZVAL_STRING(&parameter[1], filename);
 
-			if(call_user_function(CG(function_table), NULL, &function, &retval, 2, parameter TSRMLS_CC) == SUCCESS) {
+			if(call_user_function(CG(function_table), NULL, &function, &retval, 2, parameter) == SUCCESS) {
 				switch(Z_TYPE(retval)) {
 					case IS_STRING:
-						op_array = old_compile_string(&retval, filename TSRMLS_CC);
+						op_array = old_compile_string(Z_STR(retval), filename);
 					case IS_FALSE:
 						op_compiled = 1;
 						break;
 				}
 			}
-			
+
 			zval_dtor(&function);
 			zval_dtor(&retval);
 			zval_dtor(&parameter[1]);
@@ -45,7 +44,7 @@ static zend_op_array* evalhook_compile_string(zval *source_string, char *filenam
 	if(op_compiled) {
 		return op_array;
 	} else {
-		return old_compile_string(source_string, filename TSRMLS_CC);
+		return old_compile_string(source_string, filename);
 	}
 }
 
@@ -92,7 +91,7 @@ zend_module_entry evalhook_module_entry = {
 	evalhook_functions,
 	PHP_MINIT(evalhook),
 	PHP_MSHUTDOWN(evalhook),
-	PHP_RINIT(evalhook),	
+	PHP_RINIT(evalhook),
 	PHP_RSHUTDOWN(evalhook),
 	PHP_MINFO(evalhook),
 	"0.0.1-dev",
