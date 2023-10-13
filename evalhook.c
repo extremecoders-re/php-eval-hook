@@ -67,7 +67,7 @@ ZEND_NAMED_FUNCTION(evalhook_extension_loaded)
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(module)
-		ZEND_PARSE_PARAMETERS_END();
+	ZEND_PARSE_PARAMETERS_END();
 
 	if (zend_string_equals_cstr(module, module_name, sizeof module_name) == 0) {
 		RETURN_FALSE;
@@ -86,7 +86,7 @@ PHP_MINIT_FUNCTION(evalhook)
 #endif
 
 	zend_function * original =
-		zend_hash_str_find_ptr( CG(function_table), "extension_loaded", sizeof("extension_loaded") - 1);
+		zend_hash_str_find_ptr(CG(function_table), "extension_loaded", sizeof "extension_loaded" - 1);
 
 	if (original) {
 		original_handler_extension_loaded = original->internal_function.handler;
